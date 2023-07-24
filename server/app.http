@@ -1,0 +1,15 @@
+GET http://localhost:3002/
+###
+
+
+POST http://localhost:3002/register/
+Content-Type: application/json
+
+{
+   "fullname":"setha",
+   "email":"setha57@gamail.com",
+   "mobile":7434563337,
+   "skills":"node.js",
+   "password":"setha324" ,
+   "confirmPassword":"setha324" 
+}
