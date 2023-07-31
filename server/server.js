@@ -4,13 +4,13 @@ const cors = require("cors");
 const usersData = require("./model/userData")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const middleware=require("./middleware")
+const middleware=require("./middleware");
 
 
 const app = express();
 app.use(express.json())
 app.use(cors())
-const port = 3002
+const port = 3008
 
 const mongURI = "mongodb+srv://umadevikavuru:umadevi1234@cluster0.drlbwri.mongodb.net/?retryWrites=true&w=majority"
 
@@ -61,8 +61,8 @@ app.post("/register", async (req, res) => {
             email,
             mobile,
             skills,
-            password: hashedpassword,
-            confirmPassword: hashedpassword
+            password:hashedpassword,
+            confirmPassword:hashedpassword
         })
         newUser.save();       //saving to mongodb collections
         res.send("user created succesfully");
@@ -85,7 +85,7 @@ app.post("/register", async (req, res) => {
                 let payload ={
                     user: isUserExist.id
                 }
-                jwt.sign(payload,'jwtPassword',{expiresIn:36000000000},
+                jwt.sign(payload,"jwtPassword",{expiresIn:36000000000},
                 (err,token)=>{
                     if(err) throw err
                     return res.json({token})
@@ -99,7 +99,15 @@ app.post("/register", async (req, res) => {
         }
     })
 
-
+    app.get("/alldevelopers", middleware,async(req,res)=>{
+        try{
+        const alldevelopers=await usersData.find({});
+        return res.json(alldevelopers);
+        }catch(err){
+            console.log(err.message)
+            res.status(500).join("server error")
+        }
+    })
 
 app.listen(port, () => {
     console.log(`Server running at ${port}`)
